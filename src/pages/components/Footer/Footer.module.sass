@@ -1,9 +1,23 @@
-@import "../../styles/mixins"
+@import '../../../styles/mixins'
     
-.HeaderContainer
+.FooterContainer
     display: grid
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr
+    grid-template-rows: 2fr 1fr 1fr
+    background-color: #E7EBE9
+    text-align: center
+    height: 9rem
 
-.HeaderItem
+    h3
+        color: #858888
+
+.FooterItem
     @include flex-c
-    // align-content: center
+
+.FooterLinkContainer
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: space-between
+    margin-left: 1vw
+    padding: 0vw 25vw
+    

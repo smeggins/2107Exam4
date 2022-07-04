@@ -13,15 +13,19 @@ function Footer() {
         );
     }
 
+    const closer = `@ Toby’s Plants Bros Company`
+
     return (
         <div>
             <div className={styles.FooterContainer}>
-                <div></div>
-                {navLink("", "HOME")}
-                {navLink("PlantsFinder", "Plants Finder")}
-                {navLink("PlantsCare", "PLANTS CARE")}
-                {navLink("MyPlants", "MY PLANTS")}
-                <div className={styles.FooterItem}><a>USER ICON</a></div>
+                <div className={styles.FooterLinkContainer}>
+                    {navLink("", "contact us")}
+                    {navLink("", "about us")}
+                    {navLink("", "subscribe us")}  
+                </div>
+                
+                {navLink("MyPlants", "back to top")}
+                <h3 className={styles.FooterCloser}>{closer}</h3>
             </div>
         </div>
     );
