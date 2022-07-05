@@ -13,6 +13,13 @@ function Footer() {
         );
     }
 
+    const goToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    };
+
     const closer = `@ Toby’s Plants Bros Company`
 
     return (
@@ -24,8 +31,8 @@ function Footer() {
                     {navLink("", "subscribe us")}  
                 </div>
                 
-                {navLink("MyPlants", "back to top")}
-                <h3 className={styles.FooterCloser}>{closer}</h3>
+                <a onClick={goToTop} >back to top</a>
+                <h4>{closer}</h4>
             </div>
         </div>
     );
