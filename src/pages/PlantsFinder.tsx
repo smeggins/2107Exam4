@@ -5,16 +5,17 @@ import styles from '@styles/PlantFinder.module.sass'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import SearchBar from './components/SearchBar/SearchBar'
-import Plant from './components/Plant/Plant'
+import PlantComponent from './components/Plant/Plant'
+import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant';
+import { Plant } from '@/shared/interfaces/Plant';
+import { useState } from 'react'
 
-const PlantsFinder: NextPage = () => {
-  const test2 = ["Plant A", "Plant B", "Plant C", "Plant D", "Plant E", "Plant F"]
+interface PlantProps {
+    plants: [Plant]
+}
 
-  function test() {
-    console.log("this is a test")
-  }
-
-  
+const PlantsFinder: NextPage = (props: PlantProps) => {
+const [plants, setPlants] = useState(props.plants)
 
   return (
     <div className={styles.container}>
@@ -32,12 +33,11 @@ const PlantsFinder: NextPage = () => {
         
         <div className={styles.PlantFinderResultsContainer}>
         {
-        test2.map(
+        plants.map(
             (item) => {
                 return (
                     <div className={styles.PlantFinderResult} key={ String(item) }>
-                        {/* <h1>{item}</h1> */}
-                        <Plant></Plant>
+                        <PlantComponent name={item.name} description={item.description} imagePath={`/plants/${item.imagePath}`}></PlantComponent>
                     </div>
                 );
             }
@@ -49,6 +49,19 @@ const PlantsFinder: NextPage = () => {
         <Footer></Footer>
     </div>
   )
+}
+
+// get server side props using id value passed by link in list card
+export async function getServerSideProps() {
+    // get all lists associated with the given id
+    const queryResult = await PlantController.getPlants();
+    // parse the results into an array of SSLists
+    const plants = JSON.parse(JSON.stringify(queryResult)) as [PlantController];
+    return {
+        props: {
+        plants
+        }
+    };
 }
 
 export default PlantsFinder

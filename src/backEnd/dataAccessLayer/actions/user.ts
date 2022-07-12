@@ -7,13 +7,15 @@ import UserModel from "@dataAccessLayer/schemas/user";
 /// Controls all actions for the User Model
 export class UserController implements DatabaseObject, User {
     /// The mongo ID given when an object is first created
-    _id: String;
+    _id: string;
     /// the users email address
-    email: String;
+    email: string;
     // the users password to be sent to the back-end for validation     
-    password: String;
+    password: string;
+    // id's of plants that were created by this user
+    plantIDs: [string]
     
-    constructor(email: String, password: String, _id: String = "") {
+    constructor(email: string, password: string, _id: string = "") {
         /// instantiated with a default value if non is given
         this._id = _id
         this.email = email;
@@ -35,10 +37,16 @@ export class UserController implements DatabaseObject, User {
     static async delete(_id: string) {
         return await ORM.deleteByID(UserModel, _id)
     }
-
+    
     /// if a user exists in the database with the given Id return it
     static async getUser(_id: string) {
         return await ORM.find(UserModel, _id)
+    }
+
+    /// if a user exists in the database with the given Id return it
+    static async getUserByEmail(userEmail: string) {
+        console.log("email: ", userEmail)
+        return await ORM.findByEmail(UserModel, userEmail)
     }
 
     /// get all users that belong to the UserModel in the database

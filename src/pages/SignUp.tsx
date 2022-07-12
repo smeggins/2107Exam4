@@ -2,23 +2,63 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '@styles/LogUp.module.sass'
+import buttonStyles from '../pages/components/TobysButton/TobysButton.module.sass'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import SearchBar from './components/SearchBar/SearchBar'
-import Plant from './components/Plant/Plant'
+import PlantComponent from './components/Plant/Plant'
 import Link from 'next/link'
 import TobysButton from './components/TobysButton/TobysButton'
 import PlantWithEdit from './components/PlantWithEdit/PlantWithEdit'
 import plantdeco from '../../public/signupdeco.png'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 const SingUp: NextPage = () => {
-  const test2 = ["Plant A", "Plant B", "Plant C", "Plant D", "Plant E", "Plant F"]
+    // router used for navigating pages
+    const router = useRouter()
+    // The logged in users ID
+    const [email, setEmail] = useState('');
+    // The logged in users ID
+    const [password, setPassword] = useState('');
+    
 
-  function test() {
-    console.log("this is a test")
-  }
+    // reference: https://nextjs.org/docs/guides/building-forms
+    const handleSubmit = async (event) => {
+        // Stop the form from submitting and refreshing the page.
+        event.preventDefault()
+        console.log("event: ", event.target.Email.value)
+        console.log("event: ", event.target.Password.value)
+        // build the values to send to the back end 
+        let rateValues = {
+            email: event.target.Email.value, 
+            password: event.target.Password.value
+        };
+        // stringify the values
+        const body = JSON.stringify(rateValues);
 
-  return (
+        // make the request to update the responses rating
+        const response = await fetch(
+            'http://localhost:3000/api/signUp',
+            {  
+                method: 'POST',
+                body: body,
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+            }
+        );
+    
+        // Get the response data from server as JSON.
+        // If server returns the name submitted, that means the form works.
+        const result = await response.json()
+        if (result.code == 200) {
+            router.push("/MyPlants")
+        }
+    }
+
+    return (
     <div className={styles.container}>
         <Head>
         <title>Create Next App</title>
@@ -28,29 +68,59 @@ const SingUp: NextPage = () => {
 
         <Header></Header>
         <div className={styles.plantDeco}><Image src={plantdeco} alt="me" layout="fill" objectFit="contain" /></div>
-        <main className={styles.main}>
+        <form onSubmit={handleSubmit} className={styles.main}>
             <div className={styles.LogUpTitleContainer}>
                 <h1>SIGN UP</h1>    
             </div>
             <div className={styles.inputContainer}>
-                <input placeholder='Email'></input>
+                <input
+                type="text" 
+                placeholder='Email'
+                name='Email'
+                required
+                minLength={3}
+                maxLength={320}
+                ></input>
             </div>
             <div className={styles.inputContainer}>
-                <input placeholder='Confirm Email'></input>
+                <input
+                type="text"
+                placeholder='Confirm Email'
+                name='ConfirmEmail'
+                required
+                minLength={3}
+                maxLength={320}></input>
             </div>
             <div className={styles.inputContainer}>
-                <input placeholder='Password'></input>
+                <input
+                type="text"
+                placeholder='Password'
+                name='Password'
+                required
+                minLength={8}
+                maxLength={32}
+                ></input>
             </div>
             <div className={styles.inputContainer}>
-                <input placeholder='Confirm Password'></input>
+                <input
+                type="text"
+                placeholder='Confirm Password'
+                name='ConfirmPassword'
+                required
+                minLength={8}
+                maxLength={32}></input>
             </div>
             <div className={styles.LogUpButtonContainer}>
-                <TobysButton name="Sign Up" path="MyPlants"></TobysButton>
+                <div className={buttonStyles.TobysButtonContainer}>
+                    <button className={buttonStyles.TobysPlantButton} type='submit'>
+                        submit
+                    </button>
+                </div>
             </div>
-        </main>
+        </form>
         <Footer></Footer>
     </div>
-  )
+    )
 }
 
 export default SingUp

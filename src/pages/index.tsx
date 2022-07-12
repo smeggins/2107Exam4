@@ -4,15 +4,21 @@ import Image from 'next/image'
 import styles from '@styles/Home.module.sass'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
-import Plant from './components/Plant/Plant'
+import PlantComponent from './components/Plant/Plant'
 import Link from 'next/link'
 import headerHero from '../../public/homeHero.png'
 import headerSubHero from '../../public/homeSubHero.png'
 import headerSubHeroTop from '../../public/homeSubHeroTop.png'
 import headerSubHeroBot from '../../public/homeSubHeroBot.png'
 import TobysButton from './components/TobysButton/TobysButton'
+import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant'
+import { Plant } from '@/shared/interfaces/Plant'
 
-const Home: NextPage = () => {
+interface PlantProps {
+    plants: [Plant]
+}
+
+const Home: NextPage = (props: PlantProps) => {
   return (
     <div className={styles.container}>
         <Head>
@@ -41,8 +47,17 @@ const Home: NextPage = () => {
         </div>
 
         <div className={styles.HomePlantContainer}>
-            <Plant></Plant>
-            <Plant></Plant>
+        {
+        props.plants.map(
+            (item) => {
+                return (
+                    <div className={styles.PlantFinderResult} key={ String(item) }>
+                        <PlantComponent name={item.name} description={item.description} imagePath={`/plants/${item.imagePath}`}></PlantComponent>
+                    </div>
+                );
+            }
+        )
+        }
         </div>
         <div className={styles.HomeButton}>
             <TobysButton name="More Plants" path="PlantsFinder"></TobysButton>
@@ -51,6 +66,19 @@ const Home: NextPage = () => {
         <Footer></Footer>
     </div>
   )
+}
+
+// get server side props using id value passed by link in list card
+export async function getServerSideProps() {
+    // get all lists associated with the given id
+    const queryResult = await PlantController.getLimitedPlants();
+    // parse the results into an array of SSLists
+    const plants = JSON.parse(JSON.stringify(queryResult)) as [PlantController];
+    return {
+        props: {
+        plants
+        }
+    };
 }
 
 export default Home

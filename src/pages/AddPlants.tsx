@@ -2,20 +2,54 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '@styles/AddPlants.module.sass'
+import buttonStyles from '../pages/components/TobysButton/TobysButton.module.sass'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import SearchBar from './components/SearchBar/SearchBar'
-import Plant from './components/Plant/Plant'
+import PlantComponent from './components/Plant/Plant'
 import Link from 'next/link'
 import TobysButton from './components/TobysButton/TobysButton'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 const AddPlants: NextPage = () => {
-    const test2 = ["Plant A", "Plant B", "Plant C", "Plant D", "Plant E", "Plant F"]
     const [plantImage, setPlantImage] = useState('')
+    // router used for navigating pages
+    const router = useRouter()
+        
+    // reference: https://nextjs.org/docs/guides/building-forms
+    const handleSubmit = async (event) => {
+        // Stop the form from submitting and refreshing the page.
+        event.preventDefault()
+        console.log("event: ", event.target.Name.value)
+        console.log("event: ", event.target.Description.value)
+        // build the values to send to the back end 
+        let rateValues = {
+            name: event.target.Name.value, 
+            description: event.target.Description.value
+        };
+        // stringify the values
+        const body = JSON.stringify(rateValues);
 
-    function submit() {
-    console.log("this is a test")
+        // make the request to update the responses rating
+        const response = await fetch(
+            'http://localhost:3000/api/addPlant',
+            {  
+                method: 'POST',
+                body: body,
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+            }
+        );
+
+        // Get the response data from server as JSON.
+        // If server returns the name submitted, that means the form works.
+        const result = await response.json()
+        if (result.code == 200) {
+            router.push("/MyPlants")
+        }
     }
 
   
@@ -29,7 +63,7 @@ const AddPlants: NextPage = () => {
         </Head>
 
         <Header></Header>
-        <main className={styles.main}>
+        <form onSubmit={handleSubmit} className={styles.main}>
         
             <div className={styles.AddPlantsHeaderTitleContainer}>
                 <h1>ADD PLANTS</h1>    
@@ -40,18 +74,36 @@ const AddPlants: NextPage = () => {
                     {/* <Image src={plantImage} alt='Plant Image'></Image> */}
                 </div>
                 <div className={styles.AddPlantsNameContainer}>
-                    <input placeholder='Name'></input>
+                    <input
+                        type="text"
+                        placeholder='Name'
+                        name='Name'
+                        required
+                        minLength={2}
+                        maxLength={10}>
+                    </input>
                 </div>
-                <div className={styles.AddPlantsDescriptionContainer}>
-                    <textarea placeholder='Descritpion'></textarea>
+                <div className={styles.AddPlantsNameContainer}>
+                    <input
+                        type="text"
+                        placeholder='Description'
+                        name='Description'
+                        required
+                        minLength={4}
+                        maxLength={50}>
+                    </input>
                 </div>
-                <div className={styles.AddPlantsButtonContainer}>
-                    <TobysButton name="Done" path="MyPlants" delegate={submit}></TobysButton>
+                <div className={styles.LogUpButtonContainer}>
+                <div className={buttonStyles.TobysButtonContainer}>
+                    <button className={buttonStyles.TobysPlantButton} type='submit'>
+                        submit
+                    </button>
                 </div>
+            </div>
             </div>
             
 
-        </main>
+        </form>
         <Footer></Footer>
     </div>
     )

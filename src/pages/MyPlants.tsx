@@ -5,21 +5,22 @@ import styles from '@styles/PlantFinder.module.sass'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import SearchBar from './components/SearchBar/SearchBar'
-import Plant from './components/Plant/Plant'
+import PlantComponent from './components/Plant/Plant'
 import Link from 'next/link'
 import TobysButton from './components/TobysButton/TobysButton'
 import PlantWithEdit from './components/PlantWithEdit/PlantWithEdit'
+import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant'
+import { Plant } from '@/shared/interfaces/Plant'
+import { useState } from 'react'
 
-const MyPlants: NextPage = () => {
-  const test2 = ["Plant A", "Plant B", "Plant C", "Plant D", "Plant E", "Plant F"]
+interface PlantProps {
+    plants: [PlantController]
+}
 
-  function test() {
-    console.log("this is a test")
-  }
+const MyPlants: NextPage = (props: PlantProps) => {
+    const [plants, setPlants] = useState(props.plants)
 
-  
-
-  return (
+    return (
     <div className={styles.container}>
         <Head>
         <title>Create Next App</title>
@@ -43,12 +44,11 @@ const MyPlants: NextPage = () => {
         
         <div className={styles.PlantFinderResultsContainer}>
         {
-        test2.map(
+        plants.map(
             (item) => {
                 return (
-                    <div className={styles.PlantFinderResult} key={ String(item) }>
-                        {/* <h1>{item}</h1> */}
-                        <PlantWithEdit id={'test'}></PlantWithEdit>
+                    <div className={styles.PlantFinderResult} key={ String(item._id) }>
+                        <PlantWithEdit pController={item}></PlantWithEdit>
                     </div>
                 );
             }
@@ -59,7 +59,22 @@ const MyPlants: NextPage = () => {
         </main>
         <Footer></Footer>
     </div>
-  )
+    )
+}
+
+// get server side props using id value passed by link in list card
+export async function getServerSideProps() {
+    // get all lists associated with the given id
+    const queryResult = await PlantController.getPlants();
+    // parse the results into an array of SSLists
+    const plants = JSON.parse(JSON.stringify(queryResult)) as [PlantController];
+    return {
+        props: {
+        plants
+        }
+    };
 }
 
 export default MyPlants
+
+

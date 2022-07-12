@@ -28,6 +28,18 @@ export class ORM {
         return foundEntries;
     }
 
+    /// return all entries in the database that match the given model
+    /// Cast the result as an array of objects you expect from the call.
+    /// Ie> i'm getting all of the questions so i cast them as: question[]
+    static async findSome(model: mongoose.Model<any>, numberOfResults: number) {
+        /// establishes a connection to the database
+        await Database.setupClient();
+        /// returns a mongoose query that needs to be Cast to the requested object type 
+        const foundEntries = await model.find({}).limit(numberOfResults);
+
+        return foundEntries;
+    }
+
     /// find a specific object by it's model and mongoose _id and returns a mongoose query
     /// Cast the result as the object type you expect from the call.
     static async find(model: mongoose.Model<any>, id: string) {
@@ -37,6 +49,30 @@ export class ORM {
         const foundEntry = await model.findById({ _id: id });
         
         return foundEntry;
+    }
+
+    /// find user document by email
+    static async findByEmail(model: mongoose.Model<any>, userEmail: string) {
+        /// establishes a connection to the database
+        await Database.setupClient();
+        console.log("email: ", userEmail)
+        /// returns a mongoose query that only includes document that contain the email
+        const foundEntries = await model.findOne({email: userEmail});
+        console.log("foundentries: ", foundEntries)
+
+        return foundEntries;
+    }
+
+    /// find user document by Name
+    static async findByName(model: mongoose.Model<any>, entityName: string) {
+        /// establishes a connection to the database
+        await Database.setupClient();
+        console.log("Name: ", entityName)
+        /// returns a mongoose query that only includes document that contain the Name
+        const foundEntries = await model.findOne({name: entityName});
+        console.log("foundentries: ", foundEntries)
+
+        return foundEntries;
     }
 
     /// delete an entry in the mongoose document for the given model that matches the given id
