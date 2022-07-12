@@ -8,6 +8,8 @@
       "@pages/*": ["../src/pages/*"],
       "@styles/*": ["../src/styles/*"],
       "@public/*": ["../public/*"],
+      "@interfaces/*": ["../src/shared/interfaces/*"],
+      "@dataAccessLayer/*": ["../src/backEnd/dataAccessLayer/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,
