@@ -6,11 +6,19 @@ import { PlantController } from "@/backEnd/dataAccessLayer/actions/plant";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // 1) get username & password from body
-    const { name, description, image }: { name: string, description: string, image: string} = req.body;
+    const {_id,  name, description, image }: { _id: string, name: string, description: string, image: string} = req.body;
     console.log("made it to form validation")
     console.log("name: ", name)
     console.log("description: ", description)
     try {
+        if (_id == null || !_id) {
+            throw {
+                code: 400,
+                message: 'invalid information given for plant ID',
+                type: 'NETWORK'
+            }
+        }
+
         if (name == null || !name || name.length <= 2 || name.length > 10) {
             throw {
                 code: 400,
@@ -27,31 +35,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        if (req.method !== 'POST') {
+        if (req.method !== 'PUT') {
             throw {
                 code: 405,
-                message: 'only POST is allowed'
+                message: 'only PUT is allowed'
             };
         }
-        console.log("about to make a plant")
-        const existingPlant: PlantController = await PlantController.getPlantByName(name.toUpperCase())
-        console.log("existingPlant: ", existingPlant)
+        console.log("about to update a plant")
+        const newPlant: PlantController = new PlantController(name.toUpperCase(), description, image, _id)
+        let response  = await newPlant.updatePlant()
+        console.log("response to update: ", response)
 
-        // 3) throw an error if it exists
-        if (existingPlant) {
-            throw {
-                code: 400,
-                message: 'plant is taken'
-            }
-        }
-
-        const plant = new PlantController(name.toUpperCase(), description, image)
-        console.log("plant.email: ", plant.imagePath)
-        plant.save()
-
-        // optional, automatically sign in the user
-        // look at nextauth docs to do this
-        // 6) send back a succesful response
         res.status(200).json(
             {
                 code: 200,

@@ -5,7 +5,6 @@ import styles from '@styles/AddPlants.module.sass'
 import buttonStyles from '../pages/components/TobysButton/TobysButton.module.sass'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
-import SearchBar from './components/SearchBar/SearchBar'
 import PlantComponent from './components/Plant/Plant'
 import Link from 'next/link'
 import TobysButton from './components/TobysButton/TobysButton'
@@ -83,23 +82,22 @@ const AddPlants: NextPage = () => {
                         maxLength={10}>
                     </input>
                 </div>
-                <div className={styles.AddPlantsNameContainer}>
-                    <input
-                        type="text"
+                <div className={styles.AddPlantsDescriptionContainer}>
+                    <textarea
                         placeholder='Description'
                         name='Description'
                         required
                         minLength={4}
                         maxLength={50}>
-                    </input>
+                    </textarea>
                 </div>
                 <div className={styles.LogUpButtonContainer}>
-                <div className={buttonStyles.TobysButtonContainer}>
-                    <button className={buttonStyles.TobysPlantButton} type='submit'>
-                        submit
-                    </button>
+                    <div className={buttonStyles.TobysButtonContainer}>
+                        <button className={buttonStyles.TobysPlantButton} type='submit'>
+                            submit
+                        </button>
+                    </div>
                 </div>
-            </div>
             </div>
             
 

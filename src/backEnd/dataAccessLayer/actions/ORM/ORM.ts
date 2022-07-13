@@ -55,10 +55,8 @@ export class ORM {
     static async findByEmail(model: mongoose.Model<any>, userEmail: string) {
         /// establishes a connection to the database
         await Database.setupClient();
-        console.log("email: ", userEmail)
         /// returns a mongoose query that only includes document that contain the email
         const foundEntries = await model.findOne({email: userEmail});
-        console.log("foundentries: ", foundEntries)
 
         return foundEntries;
     }
@@ -67,10 +65,8 @@ export class ORM {
     static async findByName(model: mongoose.Model<any>, entityName: string) {
         /// establishes a connection to the database
         await Database.setupClient();
-        console.log("Name: ", entityName)
         /// returns a mongoose query that only includes document that contain the Name
         const foundEntries = await model.findOne({name: entityName});
-        console.log("foundentries: ", foundEntries)
 
         return foundEntries;
     }

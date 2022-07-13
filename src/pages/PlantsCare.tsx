@@ -1,20 +1,36 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '@styles/PlantFinder.module.sass'
+import stylesSearch from '@styles/SearchBar.module.sass'
+import searchIcon from '@public/searchIcon.png'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
-import SearchBar from './components/SearchBar/SearchBar'
 import PlantComponent from './components/Plant/Plant'
 import { ToolController } from '@/backEnd/dataAccessLayer/actions/tool'
 import { Tool } from '@/shared/interfaces/Tool'
 import { useState } from 'react'
+import {SearchTools} from '@/shared/actions/search'
+import Image from 'next/image'
 
 interface ToolProps {
-  tools: [Tool]
+  tools: [Tool?]
 }
 
 const PlantsCare: NextPage = (props: ToolProps) => {
     const [tools, setTools] = useState(props.tools)
+    const [searchVal, setSearchVal] = useState("")
+
+    async function search(event) {
+        const result:[ToolController?] = await SearchTools(event, searchVal) as [ToolController?]
+
+        if (result == null) {
+            setTools(props.tools)
+        }
+        else {
+            setTools(result)
+        }
+    }
+
     return (
         <div className={styles.container}>
             <Head>
@@ -25,24 +41,27 @@ const PlantsCare: NextPage = (props: ToolProps) => {
 
             <Header></Header>
             <main className={styles.main}>
-            <SearchBar></SearchBar>
+                <div className={stylesSearch.SearchBarContainer}>
+                    <div>
+                        <div className={stylesSearch.SearchBarIcon}><Image src={searchIcon} alt="me" layout="fill" objectFit="contain" /></div>
+                        <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value)}} placeholder='search' type="text" name='search' onKeyDown={search} />
+                    </div>
+                </div>
 
-            <h1>Plants Care</h1>
-            
-            <div className={styles.PlantFinderResultsContainer}>
-            {
-                tools.map(
-                (item) => {
-                    return (
-                        <div className={styles.PlantFinderResult} key={ String(item) }>
-                            <PlantComponent name={item.name} description={item.description} imagePath={`/tools/${item.imagePath}`}></PlantComponent>
-                        </div>
-                    );
+                <h1>Plants Care</h1>
+                <div className={styles.PlantFinderResultsContainer}>
+                {
+                    tools.map(
+                    (item) => {
+                        return (
+                            <div className={styles.PlantFinderResult} key={ String(item.name) }>
+                                <PlantComponent name={item.name} description={item.description} imagePath={`/tools/${item.imagePath}`}></PlantComponent>
+                            </div>
+                        );
+                    }
+                    )
                 }
-                )
-            }
-            </div>
-
+                </div>
             </main>
             <Footer></Footer>
         </div>

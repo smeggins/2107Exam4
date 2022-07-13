@@ -4,21 +4,33 @@ import Image from 'next/image'
 import styles from '@styles/PlantFinder.module.sass'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
-import SearchBar from './components/SearchBar/SearchBar'
-import PlantComponent from './components/Plant/Plant'
-import Link from 'next/link'
+import stylesSearch from '@styles/SearchBar.module.sass';
 import TobysButton from './components/TobysButton/TobysButton'
 import PlantWithEdit from './components/PlantWithEdit/PlantWithEdit'
 import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant'
-import { Plant } from '@/shared/interfaces/Plant'
 import { useState } from 'react'
+import { SearchPlants } from '@/shared/actions/search'
+import searchIcon from '@public/searchIcon.png'
+
 
 interface PlantProps {
-    plants: [PlantController]
+    plants: [PlantController?]
 }
 
 const MyPlants: NextPage = (props: PlantProps) => {
     const [plants, setPlants] = useState(props.plants)
+    const [searchVal, setSearchVal] = useState("")
+
+    async function search(event) {
+        const result:[PlantController?] = await SearchPlants(event, searchVal) as [PlantController?]
+
+        if (result == null) {
+            setPlants(props.plants)
+        }
+        else {
+            setPlants(result)
+        }
+    }
 
     return (
     <div className={styles.container}>
@@ -30,7 +42,12 @@ const MyPlants: NextPage = (props: PlantProps) => {
 
         <Header></Header>
         <main className={styles.main}>
-        <SearchBar></SearchBar>
+        <div className={stylesSearch.SearchBarContainer}>
+            <div>
+                <div className={stylesSearch.SearchBarIcon}><Image src={searchIcon} alt="me" layout="fill" objectFit="contain" /></div>
+                <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value)}} placeholder='search' type="text" name='search' onKeyDown={search} />
+            </div>
+        </div>
 
         
         <div className={styles.MyPlantsHeaderContainer}>

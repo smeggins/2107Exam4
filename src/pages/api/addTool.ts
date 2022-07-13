@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             };
         }
         console.log("about to make a Tool")
-        const existingTool: ToolController = await ToolController.getToolByName(name)
+        const existingTool: ToolController = await ToolController.getToolByName(name.toUpperCase())
         console.log("existingTool: ", existingTool)
 
         // 3) throw an error if it exists
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        const Tool = new ToolController(name, description, image)
+        const Tool = new ToolController(name.toUpperCase(), description, image)
         console.log("Tool.email: ", Tool.imagePath)
         Tool.save()
 

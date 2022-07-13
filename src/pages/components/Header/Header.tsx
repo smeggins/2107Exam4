@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import styles from './Header.module.sass';
 // import image from '../../../../public/UserIcon.png'
@@ -7,12 +8,19 @@ import styles from './Header.module.sass';
 function Header() {
 
     const [image, setImage] = useState('/UserIcon.png')
-    
+    const router = useRouter()
+
     function navLink(path: string, title:string) {
+
         return (
             <div className={styles.HeaderItem}>
                 <Link href={{ pathname: '/' + path }}>
-                    <a>{title}</a>
+                    {
+                        (router.pathname.substring(1).toLowerCase() == path.toLowerCase() ) ?
+                        <a className={styles.underlined}>{title.toUpperCase()}</a>
+                        :
+                        <a>{title.toUpperCase()}</a>
+                    }
                 </Link>
             </div>
         );

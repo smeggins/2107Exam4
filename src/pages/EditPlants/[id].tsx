@@ -4,27 +4,123 @@ import Image from 'next/image'
 import styles from '@styles/Edit.module.sass'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
-import SearchBar from '../components/SearchBar/SearchBar'
 import PlantComponent from '../components/Plant/Plant'
 import Link from 'next/link'
 import TobysButton from '../components/TobysButton/TobysButton'
 import { useState } from 'react'
 import image from '../../../public/editTemplate.png'
+import { useRouter } from 'next/router'
+import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant'
 
+interface Props {
+    plant: PlantController
+}
 
-const EditPlants: NextPage = () => {
-  const test2 = ["Plant A", "Plant B", "Plant C", "Plant D", "Plant E", "Plant F"]
-
-  function test() {
-    console.log("this is a test")
-  }
-  const [plantImage, setPlantImage] = useState('')
+const EditPlants: NextPage = (props: Props) => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const router = useRouter()
+  const { id } = router.query
 
-  
+    // reference: https://nextjs.org/docs/guides/building-forms
+    const handleSubmit = async (event) => {
+        // // Stop the form from submitting and refreshing the page.
+        // event.preventDefault()
+        // console.log("event: ", event.target.Name.value)
+        // console.log("event: ", event.target.Description.value)
+        // // build the values to send to the back end 
+        // let rateValues = {
+        //     name: event.target.Name.value, 
+        //     description: event.target.Description.value
+        // };
+        // // stringify the values
+        // const body = JSON.stringify(rateValues);
 
-  return (
+        // // make the request to update the responses rating
+        // const response = await fetch(
+        //     'http://localhost:3000/api/addPlant',
+        //     {  
+        //         method: 'PUT',
+        //         body: body,
+        //         headers: new Headers({
+        //             'Content-Type': 'application/json',
+        //             Accept: 'application/json',
+        //         }),
+        //     }
+        // );
+
+        // // Get the response data from server as JSON.
+        // // If server returns the name submitted, that means the form works.
+        // const result = await response.json()
+        // if (result.code == 200) {
+        //     router.push("/MyPlants")
+        // }
+        
+        console.log("id: ", id)
+    }
+
+    async function submitChanges() {
+        console.log("about to update changes")
+        let rateValues = {
+            _id: id,
+            name: name, 
+            description: description,
+            image: props.plant.imagePath
+        };
+        // stringify the values
+        const body = JSON.stringify(rateValues);
+        console.log("body: ", body)
+
+        // make the request to update the responses rating
+        const response = await fetch(
+            'http://localhost:3000/api/updatePlant',
+            {  
+                method: 'PUT',
+                body: body,
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+            }
+        );
+
+        // Get the response data from server as JSON.
+        // If server returns the name submitted, that means the form works.
+        const result = await response.json()
+        if (result.code == 200) {
+            router.push("/MyPlants")
+        }
+    }
+
+    async function deletePlant() {
+        let rateValues = {
+            _id: id
+        };
+        // stringify the values
+        const body = JSON.stringify(rateValues);
+
+        // make the request to update the responses rating
+        const response = await fetch(
+            'http://localhost:3000/api/deletePlant',
+            {  
+                method: 'PUT',
+                body: body,
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }),
+            }
+        );
+
+        // Get the response data from server as JSON.
+        // If server returns the name submitted, that means the form works.
+        const result = await response.json()
+        if (result.code == 200) {
+            router.push("/MyPlants")
+        }
+    }
+
+    return (
     <div className={styles.container}>
         <Head>
         <title>Create Next App</title>
@@ -39,27 +135,40 @@ const EditPlants: NextPage = () => {
             </div>
 
             <div className={styles.EditPlantsContainer}>
-                <div className={styles.EditImage}><Image src={image} alt='Plant Image'></Image></div>
+                <div className={styles.EditImage}><Image src={ `/plants/${props.plant.imagePath}` } alt='Plant Image' layout="fill" objectFit="contain"></Image></div>
                 <div className={styles.EditPlantsValuesContainer}>
                     <div className={styles.EditPlantsNameContainer}>
                         <h2>Name</h2>
-                        <input placeholder='Name'></input>
+                        <input placeholder='Name' onChange={e => {setName(e.target.value)}}></input>
                     </div>
                     <div className={styles.EditPlantsDescriptionContainer}>
                         <h2>Description</h2>
-                        <input placeholder='Description'></input>
+                        <input placeholder='Description' onChange={e => {setDescription(e.target.value)}}></input>
                     </div>
                     <div className={styles.EditPlantsButtonContainer}>
-                        <div><TobysButton name={'Done'} path={'MyPlants'}></TobysButton></div>
-                        <div className={styles.EditButton}><TobysButton name={'Delete'} path={'MyPlants'}></TobysButton></div>
+                        <div><TobysButton name={'Done'} path={'MyPlants'} delegate={submitChanges}></TobysButton></div>
+                        <div className={styles.EditButton}><TobysButton name={'Delete'} path={'MyPlants'} delegate={deletePlant}></TobysButton></div>
                     </div>
-                    
                 </div>
             </div>
         </main>
         <Footer></Footer>
     </div>
-  )
+    )
+}
+
+// get server side props using id value passed by link in list card
+export async function getServerSideProps(router) {
+    const { id } = router.query
+    // get all lists associated with the given id
+    const queryResult = await PlantController.getPlant(id)
+    // parse the results into an array of SSLists
+    const plant = JSON.parse(JSON.stringify(queryResult)) as PlantController;
+    return {
+        props: {
+            plant
+        }
+    };
 }
 
 export default EditPlants

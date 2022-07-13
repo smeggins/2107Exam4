@@ -11,6 +11,7 @@ import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant';
 function PlantWithEdit(pController) {
     const path = `EditPlants/${pController.pController._id}`
     const plant: PlantController = pController
+
     
 
     return (
