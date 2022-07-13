@@ -12,12 +12,15 @@ import headerSubHeroBot from '../../public/homeSubHeroBot.png'
 import TobysButton from './components/TobysButton/TobysButton'
 import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant'
 import { Plant } from '@/shared/interfaces/Plant'
+import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 interface PlantProps {
     plants: [Plant]
 }
 
 const Home: NextPage = (props: PlantProps) => {
+
   return (
     <div className={styles.container}>
         <Head>

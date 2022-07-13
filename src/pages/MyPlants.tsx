@@ -65,7 +65,7 @@ const MyPlants: NextPage = (props: PlantProps) => {
             (item) => {
                 return (
                     <div className={styles.PlantFinderResult} key={ String(item._id) }>
-                        <PlantWithEdit pController={item}></PlantWithEdit>
+                        <PlantWithEdit id={item._id} name={item.name} description={item.description} imagePath={item.imagePath}></PlantWithEdit>
                     </div>
                 );
             }

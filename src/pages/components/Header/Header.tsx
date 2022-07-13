@@ -1,14 +1,23 @@
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Header.module.sass';
 // import image from '../../../../public/UserIcon.png'
 
 function Header() {
 
     const [image, setImage] = useState('/UserIcon.png')
+    const [path, setPath] = useState('/auth/Login')
     const router = useRouter()
+    const {data: session, status: loading} = useSession();
+    useEffect(()=> {
+        if (session) {
+            setImage("/userIconLoggedIn.png")
+            setPath("/MyPlants")
+        }
+    }, [session]);
 
     function navLink(path: string, title:string) {
 
@@ -36,7 +45,7 @@ function Header() {
                 {navLink("MyPlants", "MY PLANTS")}
                 <div className={styles.HeaderUserIconContainer}>
                     <div className={styles.HeaderUserIcon}>
-                    <Link href={{ pathname: '/SignUp' }}>
+                    <Link href={{ pathname: path }}>
                         <a><Image src={image} alt="me" layout="fill" objectFit="contain" /></a>
                     </Link>
                     </div>

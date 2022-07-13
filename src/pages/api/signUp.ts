@@ -8,12 +8,16 @@ import { hash } from 'bcrypt';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // 1) get username & password from body
     const { email, password }: { email: string, password: string} = req.body;
-    const lowercasedEmail = email.toLowerCase();
     console.log("made it to form validation")
     console.log("email: ", email)
     console.log("password: ", password)
-    console.log("lowercasedEmail: ", lowercasedEmail)
     try {
+        if (req.method !== 'POST') {
+            throw {
+                code: 405,
+                message: 'only POST is allowed'
+            };
+        }
         if (email == null || !email || email.length <= 3 || email.length > 320) {
             throw {
                 code: 400,
@@ -29,13 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 type: 'NETWORK'
             }
         }
-
-        if (req.method !== 'POST') {
-            throw {
-                code: 405,
-                message: 'only POST is allowed'
-            };
-        }
+        const lowercasedEmail = email.toLowerCase();
         console.log("about to make a user")
         const existingUser: UserController = await UserController.getUserByEmail(lowercasedEmail)
         console.log("existingUser: ", existingUser)
