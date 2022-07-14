@@ -15,10 +15,11 @@ export class UserController implements DatabaseObject, User {
     // id's of plants that were created by this user
     plantIDs: [string];
     
-    constructor(email: string, password: string, _id: string = "") {
+    constructor(email: string, password: string, _id: string = "", plantIDs: [string] = null) {
         this.email = email;
         this.password = password;
         this._id = _id;
+        this.plantIDs = plantIDs;
     }
     
 
@@ -56,7 +57,8 @@ export class UserController implements DatabaseObject, User {
     toHashMap(): HashMap {
         return {
             email: this.email,
-            password: this.password
+            password: this.password,
+            plantIDs: this.plantIDs
         };
     }
 }

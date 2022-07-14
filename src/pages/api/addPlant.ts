@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { PlantController } from "@/backEnd/dataAccessLayer/actions/plant";
+import { UserController } from "@/backEnd/dataAccessLayer/actions/user";
 
 //Reference Yudhvirs Class 30/06/2022
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     //plant information sent with req parsed into vars
-    const { name, description, image }: { name: string, description: string, image: string} = req.body;
+    const { name, description, image, userID }: { name: string, description: string, image: string, userID: string} = req.body;
 
     try {
         // validate the correct request type
@@ -31,6 +32,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 type: 'NETWORK'
             };
         }
+
+        // basic validation of input values
+        if (userID == null || !userID) {
+            throw {
+                code: 400,
+                message: 'No userID recieved',
+                type: 'NETWORK'
+            };
+        }
         
         // attempt to retrieve plant by name
         const existingPlant: PlantController = await PlantController.getPlantByName(name.toUpperCase());
@@ -44,8 +54,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // create new plant object and save it
-        const plant = new PlantController(name.toUpperCase(), description, image);
-        plant.save();
+        let plant = new PlantController(name.toUpperCase(), description, image);
+        await plant.save();
+        // retrieve our newly created plants mongoose generated ID
+        plant = await PlantController.getPlantByName(plant.name);
+        // retrieve user values from user controller
+        const uVals = await UserController.getUser(userID);
+        // create a usercontroller to update
+        const newUser = new UserController(uVals.email, uVals.password, uVals._id.toString(), uVals.plantIDs);
+        // add the new plant id
+        newUser.plantIDs.push(plant._id);
+        // update the user
+        newUser.updateUser();
 
         // return success
         res.status(200).json(

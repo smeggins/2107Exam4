@@ -4,16 +4,26 @@ import styles from '@styles/AddPlants.module.sass';
 import buttonStyles from '../pages/components/TobysButton/TobysButton.module.sass';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 
 const AddPlants: NextPage = () => {
     const demoPlantPathPostix = ["A", "B", "C", "D", "E", "F", "AA", "BB", "CC", "DD",];
     // sets the current plant image path
     const [plantImage, setPlantImage] = useState(`plant${demoPlantPathPostix[Math.floor(Math.random() * demoPlantPathPostix.length)]}.png`);
+    const [userID, setUserID] = useState("");
     // router used for navigating pages
     const router = useRouter();
+    const {data: session, status: loading} = useSession();
+
+    // if session exists show logged in icon and change user icon re-direct path
+    useEffect(()=> {
+        if (session) {
+            setUserID(session.user.id);
+        }
+    }, [session]);
         
     // reference: https://nextjs.org/docs/guides/building-forms
     const handleSubmit = async (event) => {
@@ -24,7 +34,8 @@ const AddPlants: NextPage = () => {
         let rateValues = {
             name: event.target.Name.value, 
             description: event.target.Description.value,
-            image: plantImage
+            image: plantImage,
+            userID: userID
         };
         // stringify the values
         const body = JSON.stringify(rateValues);
