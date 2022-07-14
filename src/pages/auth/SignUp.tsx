@@ -43,7 +43,7 @@ const SingUp: NextPage = () => {
         // If server returns the name submitted, that means the form works.
         const result = await response.json();
         if (result.code == 200) {
-            router.push("/MyPlants");
+            router.push("/Login");
         }
     };
 
