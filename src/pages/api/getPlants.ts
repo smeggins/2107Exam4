@@ -40,6 +40,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             );
         }
+
+        throw {
+            code: 400,
+            message: 'failed to retrieve',
+            type: 'NETWORK'
+        };
     } 
     catch(error: any) {
         const { code = 500, message } = error;

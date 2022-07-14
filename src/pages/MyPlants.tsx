@@ -90,7 +90,6 @@ export async function getServerSideProps({req}) {
     const user: UserController = await UserController.getUser(session.user.id);
     // get all plants
     const queryResult = await PlantController.getPlantsByIDs(user.plantIDs);
-    console.log("queryResult: ", queryResult)
     // parse the results into an array of plants and return them
     const plants = JSON.parse(JSON.stringify(queryResult)) as [PlantController];
     
