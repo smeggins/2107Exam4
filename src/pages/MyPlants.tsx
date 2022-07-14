@@ -20,18 +20,33 @@ const MyPlants: NextPage = (props: {plants: [PlantController?]}) => {
     const [plants, setPlants] = useState(props.plants);
     // the value to search by
     const [searchVal, setSearchVal] = useState("");
+    // 
+    useEffect(() => {
+        if (searchVal.replace(/\s/g, '') == "") {
+            setPlants(props.plants);
+        }
+    }, [searchVal, props]);
 
     // perform search for plants
     async function search(event) {
-        // the result of out search for plants
-        const result:[PlantController?] = await SearchPlants(event, searchVal) as [PlantController?];
-
-        // assign plants depending on result
-        if (result == null) {
-            setPlants(props.plants);
-        }
-        else {
-            setPlants(result);
+            // perform on enter keypress
+        if (event.key === 'Enter') {
+            // validation if string is empty
+            if (searchVal == "") {
+                setPlants(props.plants);
+            }
+            else {
+                // the result of out search for plants
+                const result:[PlantController] = plants.filter(plant => plant.name.indexOf(searchVal.toUpperCase()) !== -1) as [PlantController];
+                const len: number = result.length;
+                // assign plants depending on result
+                if (len == 0) {
+                    setPlants([]);
+                }
+                else {
+                    setPlants(result);
+                }
+            }
         }
     }
 
