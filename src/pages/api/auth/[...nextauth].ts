@@ -40,7 +40,7 @@ export default NextAuth(
                     await Database.setupClient();
 
                     //find user by email
-                    const user = await UserController.getUserByEmail(email)
+                    const user = await UserController.getUserByEmail(email);
 
                     if (user) {                        
                         // compare given password against stored password using bcrypt

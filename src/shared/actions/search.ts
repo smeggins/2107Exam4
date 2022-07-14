@@ -7,7 +7,7 @@ export async function SearchPlants(event, searchVal) {
     if (event.key === 'Enter') {
         // validation if string is empty
         if (searchVal == "") {
-            return null
+            return null;
         }
         else {
             // make an API fetch request to get plants that match search val
@@ -28,11 +28,11 @@ export async function SearchPlants(event, searchVal) {
 
             // if no results return an empty array of plantControllers, otherwise return the results
             if (!newPlants.plant) {
-                const empty: [PlantController?] = []
-                return empty
+                const empty: [PlantController?] = [];
+                return empty;
             } 
             else {
-                return [newPlants.plant]
+                return [newPlants.plant];
             }
         }
     }
@@ -44,7 +44,7 @@ export async function SearchTools(event, searchVal) {
     if (event.key === 'Enter') {
         // validation if string is empty
         if (searchVal == "") {
-            return null
+            return null;
         }
         else {
             // make an API fetch request to get tools that match search val
@@ -65,11 +65,11 @@ export async function SearchTools(event, searchVal) {
 
             // if no results return an empty array of ToolControllers, otherwise return the results
             if (!newTools.tool) {
-                const empty: [ToolController?] = []
-                return empty
+                const empty: [ToolController?] = [];
+                return empty;
             } 
             else {
-                return [newTools.tool]
+                return [newTools.tool];
             }
         }
     }

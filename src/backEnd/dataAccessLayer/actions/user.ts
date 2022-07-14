@@ -13,7 +13,7 @@ export class UserController implements DatabaseObject, User {
     // the users password to be sent to the back-end for validation     
     password: string;
     // id's of plants that were created by this user
-    plantIDs: [string]
+    plantIDs: [string];
     
     constructor(email: string, password: string, _id: string = "") {
         this.email = email;
@@ -24,33 +24,32 @@ export class UserController implements DatabaseObject, User {
 
     /// saves the user to the database
     async save() {
-        return await ORM.saveObject(this, UserModel)
+        return await ORM.saveObject(this, UserModel);
     }
 
     /// if this objects _id matches a document Id update it with this objects values (excluding _id)
     async updateUser() {
-        return await ORM.updateByID(this._id, this, UserModel)
+        return await ORM.updateByID(this._id, this, UserModel);
     }
 
     /// deletes the user with the given ID
     static async delete(_id: string) {
-        return await ORM.deleteByID(UserModel, _id)
+        return await ORM.deleteByID(UserModel, _id);
     }
     
     /// if a user exists in the database with the given Id return it
     static async getUser(_id: string) {
-        return await ORM.find(UserModel, _id)
+        return await ORM.find(UserModel, _id);
     }
 
     /// if a user exists in the database with the given Id return it
     static async getUserByEmail(userEmail: string) {
-        console.log("email: ", userEmail)
-        return await ORM.findByEmail(UserModel, userEmail)
+        return await ORM.findByEmail(UserModel, userEmail);
     }
 
     /// get all users that belong to the UserModel in the database
     static async getUsers() {
-        return await ORM.findAll(UserModel)
+        return await ORM.findAll(UserModel);
     }
 
     /// converts given values of this object into a HashMap

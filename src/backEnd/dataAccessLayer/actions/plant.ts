@@ -13,48 +13,48 @@ export class PlantController implements DatabaseObject, Plant {
     // a short description of the Plant to be displayed
     description: string;
     // that path to the image
-    imagePath: string
+    imagePath: string;
     
     constructor(name: string, description: string, imagePath: string = "", _id: string = "") {
         this.name = name;
         this.description = description;
         this.imagePath = imagePath;
-        this._id = _id
+        this._id = _id;
     }
 
     /// saves the user to the database
     async save() {
-        return await ORM.saveObject(this, PlantModel)
+        return await ORM.saveObject(this, PlantModel);
     }
 
     /// if this objects _id matches a document Id update it with this objects values (excluding _id)
     async updatePlant() {
-        return await ORM.updateByID(this._id, this, PlantModel)
+        return await ORM.updateByID(this._id, this, PlantModel);
     }
 
     /// deletes the user with the given ID
     static async delete(_id: string) {
-        return await ORM.deleteByID(PlantModel, _id)
+        return await ORM.deleteByID(PlantModel, _id);
     }
     
     /// if a user exists in the database with the given Id return it
     static async getPlant(_id: string) {
-        return await ORM.find(PlantModel, _id)
+        return await ORM.find(PlantModel, _id);
     }
 
     /// if a user exists in the database with the given Id return it
     static async getPlantByName(name: string) {
-        return await ORM.findByName(PlantModel, name)
+        return await ORM.findByName(PlantModel, name);
     }
 
     /// get all users that belong to the PlantModel in the database
     static async getPlants() {
-        return await ORM.findAll(PlantModel)
+        return await ORM.findAll(PlantModel);
     }
 
     /// get all users that belong to the PlantModel in the database
     static async getLimitedPlants() {
-        return await ORM.findSome(PlantModel, 2)
+        return await ORM.findSome(PlantModel, 2);
     }
 
     /// converts given values of this object into a HashMap

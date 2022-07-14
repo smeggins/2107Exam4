@@ -21,11 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 code: 400,
                 message: 'invalid information given for plant name',
                 type: 'NETWORK'
-            }
+            };
         }
         
         // attempts to retrieve tool by name
-        const existingTool = await ToolController.getToolByName(name)
+        const existingTool = await ToolController.getToolByName(name);
 
         // returns success and tool
         if (existingTool) {

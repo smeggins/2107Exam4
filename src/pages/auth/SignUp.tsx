@@ -1,22 +1,22 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '@styles/LogUp.module.sass'
-import buttonStyles from '@pages/components/TobysButton/TobysButton.module.sass'
-import Header from '../components/Header/Header'
-import Footer from '../components/Footer/Footer'
-import plantdeco from '@public/signupdeco.png'
-import { useState } from 'react'
-import { useRouter } from 'next/router'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '@styles/LogUp.module.sass';
+import buttonStyles from '@pages/components/TobysButton/TobysButton.module.sass';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
+import plantdeco from '@public/signupdeco.png';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const SingUp: NextPage = () => {
     // router used for navigating pages
-    const router = useRouter()
+    const router = useRouter();
 
     // reference: https://nextjs.org/docs/guides/building-forms
     const handleSubmit = async (event) => {
         // Stop the form from submitting and refreshing the page.
-        event.preventDefault()
+        event.preventDefault();
         
         // build the values to send to the back end 
         let rateValues = {
@@ -41,11 +41,11 @@ const SingUp: NextPage = () => {
     
         // Get the response data from server as JSON.
         // If server returns the name submitted, that means the form works.
-        const result = await response.json()
+        const result = await response.json();
         if (result.code == 200) {
-            router.push("/MyPlants")
+            router.push("/MyPlants");
         }
-    }
+    };
 
     return (
     <div className={styles.container}>
@@ -109,7 +109,7 @@ const SingUp: NextPage = () => {
         </form>
         <Footer></Footer>
     </div>
-    )
-}
+    );
+};
 
-export default SingUp
+export default SingUp;

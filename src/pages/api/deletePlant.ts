@@ -21,11 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 code: 400,
                 message: 'invalid information given for plant ID',
                 type: 'NETWORK'
-            }
+            };
         }
         
         // attempts to delete the plant
-        const response  = await PlantController.delete(_id)
+        const response  = await PlantController.delete(_id);
 
         // returns the success
         res.status(200).json(
@@ -37,7 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } 
     catch(error: any) {
         const { code = 500, message } = error;
-        console.log(message)
         res.status(code).json(
             {
                 code,

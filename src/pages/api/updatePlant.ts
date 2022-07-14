@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 code: 400,
                 message: 'invalid information given for plant ID',
                 type: 'NETWORK'
-            }
+            };
         }
 
         if (name == null || !name || name.length <= 2 || name.length > 10) {
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 code: 400,
                 message: 'invalid information given for plant name',
                 type: 'NETWORK'
-            }
+            };
         }
 
         if (description == null || !description || description.length < 4 || description.length > 60) {
@@ -37,12 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 code: 400,
                 message: 'invalid information given for plant description',
                 type: 'NETWORK'
-            }
+            };
         }
 
         // creates a new plant with the updated values and updates it
-        const newPlant: PlantController = new PlantController(name.toUpperCase(), description, image, _id)
-        let response  = await newPlant.updatePlant()
+        const newPlant: PlantController = new PlantController(name.toUpperCase(), description, image, _id);
+        let response  = await newPlant.updatePlant();
 
         // returns success
         res.status(200).json(

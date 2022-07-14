@@ -1,20 +1,20 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '@styles/LogUp.module.sass'
-import Header from '../components/Header/Header'
-import Footer from '../components/Footer/Footer'
-import Link from 'next/link'
-import plantdeco from '@public/logindeco.svg'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '@styles/LogUp.module.sass';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
+import Link from 'next/link';
+import plantdeco from '@public/logindeco.svg';
 import { signIn } from "next-auth/react";
-import SubmitButton from '../components/SubmitButton/SubmitButton'
-import { useRef } from 'react'
+import SubmitButton from '../components/SubmitButton/SubmitButton';
+import { useRef } from 'react';
 
 const Login: NextPage = () => {
     // users given email address
-    const email = useRef(null)
+    const email = useRef(null);
     // users given password
-    const password = useRef(null)
+    const password = useRef(null);
 
     // uses the nextauth signin function to sign the user in
     async function logIn() {
@@ -50,7 +50,7 @@ const Login: NextPage = () => {
         </main>
         <Footer></Footer>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

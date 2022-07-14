@@ -7,19 +7,19 @@ import styles from './Header.module.sass';
 
 function Header() {
     // the user Icon image
-    const [image, setImage] = useState('/UserIcon.png')
+    const [image, setImage] = useState('/UserIcon.png');
     // the path to re-direct the browser to when clicking the user icon image
-    const [path, setPath] = useState('/auth/Login')
+    const [path, setPath] = useState('/auth/Login');
     // instance of useRouter
-    const router = useRouter()
+    const router = useRouter();
     // session data
     const {data: session, status: loading} = useSession();
 
     // if session exists show logged in icon and change user icon re-direct path
     useEffect(()=> {
         if (session) {
-            setImage("/userIconLoggedIn.png")
-            setPath("/MyPlants")
+            setImage("/userIconLoggedIn.png");
+            setPath("/MyPlants");
         }
     }, [session]);
 

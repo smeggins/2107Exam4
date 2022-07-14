@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 code: 400,
                 message: 'invalid information given for Tool name',
                 type: 'NETWORK'
-            }
+            };
         }
 
         if (description == null || !description || description.length < 4 || description.length > 60) {
@@ -29,23 +29,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 code: 400,
                 message: 'invalid information given for Tool description',
                 type: 'NETWORK'
-            }
+            };
         }
 
         // attempts to retrieve a tool with the given name
-        const existingTool: ToolController = await ToolController.getToolByName(name.toUpperCase())
+        const existingTool: ToolController = await ToolController.getToolByName(name.toUpperCase());
 
         // if tool exists throw error
         if (existingTool) {
             throw {
                 code: 400,
                 message: 'Tool is taken'
-            }
+            };
         }
 
         // build a new instance of the tool and save it
-        const Tool = new ToolController(name.toUpperCase(), description, image)
-        Tool.save()
+        const Tool = new ToolController(name.toUpperCase(), description, image);
+        Tool.save();
 
         // return success
         res.status(200).json(

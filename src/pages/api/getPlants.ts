@@ -21,11 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 code: 400,
                 message: 'invalid information given for plant name',
                 type: 'NETWORK'
-            }
+            };
         }
 
         // attempts to retrieve plant by name
-        const existingPlant = await PlantController.getPlantByName(name)
+        const existingPlant = await PlantController.getPlantByName(name);
 
         // validates plant was retrieved and returns it
         if (existingPlant) {

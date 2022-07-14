@@ -1,23 +1,23 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '@styles/Edit.module.sass'
-import Header from '../components/Header/Header'
-import Footer from '../components/Footer/Footer'
-import TobysButton from '../components/TobysButton/TobysButton'
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '@styles/Edit.module.sass';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
+import TobysButton from '../components/TobysButton/TobysButton';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant';
 
 const EditPlants: NextPage = (props: {plant: PlantController}) => {
     // plants new name
-    const [name, setName] = useState('')
+    const [name, setName] = useState('');
     // plants new description
-    const [description, setDescription] = useState('')
+    const [description, setDescription] = useState('');
     // instance of router
-    const router = useRouter()
+    const router = useRouter();
     // the value passed in the html cast as id var
-    const { id } = router.query
+    const { id } = router.query;
 
     // submits the form values to backend tp be updated
     async function submitChanges() {
@@ -45,10 +45,10 @@ const EditPlants: NextPage = (props: {plant: PlantController}) => {
         );
 
         // Get the response data from server as JSON.
-        const result = await response.json()
+        const result = await response.json();
         // if successful re-direct to myplants page
         if (result.code == 200) {
-            router.push("/MyPlants")
+            router.push("/MyPlants");
         }
     }
 
@@ -75,10 +75,10 @@ const EditPlants: NextPage = (props: {plant: PlantController}) => {
         );
 
         // Get the response data from server as JSON.
-        const result = await response.json()
+        const result = await response.json();
         // if successful re-direct to myplants page
         if (result.code == 200) {
-            router.push("/MyPlants")
+            router.push("/MyPlants");
         }
     }
 
@@ -100,11 +100,11 @@ const EditPlants: NextPage = (props: {plant: PlantController}) => {
                 <div className={styles.EditPlantsValuesContainer}>
                     <div className={styles.EditPlantsNameContainer}>
                         <h2>Name</h2>
-                        <input placeholder='Name' onChange={e => {setName(e.target.value)}}></input>
+                        <input placeholder='Name' onChange={e => {setName(e.target.value);}}></input>
                     </div>
                     <div className={styles.EditPlantsDescriptionContainer}>
                         <h2>Description</h2>
-                        <input placeholder='Description' onChange={e => {setDescription(e.target.value)}}></input>
+                        <input placeholder='Description' onChange={e => {setDescription(e.target.value);}}></input>
                     </div>
                     <div className={styles.EditPlantsButtonContainer}>
                         <div><TobysButton name={'Done'} path={'MyPlants'} delegate={submitChanges}></TobysButton></div>
@@ -115,14 +115,14 @@ const EditPlants: NextPage = (props: {plant: PlantController}) => {
         </main>
         <Footer></Footer>
     </div>
-    )
-}
+    );
+};
 
 export async function getServerSideProps(router) {
     // get id from html
-    const { id } = router.query
+    const { id } = router.query;
     // get plant associated with the given id
-    const queryResult = await PlantController.getPlant(id)
+    const queryResult = await PlantController.getPlant(id);
     // parse the results and return them
     const plant = JSON.parse(JSON.stringify(queryResult)) as PlantController;
     
@@ -133,4 +133,4 @@ export async function getServerSideProps(router) {
     };
 }
 
-export default EditPlants
+export default EditPlants;

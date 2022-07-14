@@ -86,10 +86,10 @@ export class ORM {
         /// establishes a connection to the database
         await Database.setupClient();
         /// converts the obj values to a hashmap
-        const values = obj.toHashMap()
+        const values = obj.toHashMap();
         // find by ID and update the given values, returning the updated document when completed
         var returnResult = await model.findOneAndUpdate({_id: _id}, values, { returnDocument: 'after' });
         
-        return returnResult
+        return returnResult;
     } 
 }

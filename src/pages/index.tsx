@@ -1,17 +1,17 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '@styles/Home.module.sass'
-import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
-import PlantComponent from './components/Plant/Plant'
-import headerHero from '../../public/homeHero.png'
-import headerSubHero from '../../public/homeSubHero.png'
-import headerSubHeroTop from '../../public/homeSubHeroTop.png'
-import headerSubHeroBot from '../../public/homeSubHeroBot.png'
-import TobysButton from './components/TobysButton/TobysButton'
-import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant'
-import { Plant } from '@/shared/interfaces/Plant'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '@styles/Home.module.sass';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import PlantComponent from './components/Plant/Plant';
+import headerHero from '../../public/homeHero.png';
+import headerSubHero from '../../public/homeSubHero.png';
+import headerSubHeroTop from '../../public/homeSubHeroTop.png';
+import headerSubHeroBot from '../../public/homeSubHeroBot.png';
+import TobysButton from './components/TobysButton/TobysButton';
+import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant';
+import { Plant } from '@/shared/interfaces/Plant';
 
 const Home: NextPage = (props: {plants: [Plant]}) => {
 
@@ -57,8 +57,8 @@ const Home: NextPage = (props: {plants: [Plant]}) => {
         </main>
         <Footer></Footer>
     </div>
-  )
-}
+  );
+};
 
 export async function getServerSideProps() {
     // get 2 plants from back-end
@@ -73,4 +73,4 @@ export async function getServerSideProps() {
     };
 }
 
-export default Home
+export default Home;

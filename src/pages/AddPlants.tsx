@@ -1,22 +1,22 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import styles from '@styles/AddPlants.module.sass'
-import buttonStyles from '../pages/components/TobysButton/TobysButton.module.sass'
-import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
-import { useState } from 'react'
-import { useRouter } from 'next/router'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import styles from '@styles/AddPlants.module.sass';
+import buttonStyles from '../pages/components/TobysButton/TobysButton.module.sass';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const AddPlants: NextPage = () => {
     // sets the current plant image path
-    const [plantImage, setPlantImage] = useState('')
+    const [plantImage, setPlantImage] = useState('');
     // router used for navigating pages
-    const router = useRouter()
+    const router = useRouter();
         
     // reference: https://nextjs.org/docs/guides/building-forms
     const handleSubmit = async (event) => {
         // Stop the form from submitting and refreshing the page.
-        event.preventDefault()
+        event.preventDefault();
 
         // build the values to send to the back end 
         let rateValues = {
@@ -40,12 +40,12 @@ const AddPlants: NextPage = () => {
         );
 
         // Get the response data from server as JSON.
-        const result = await response.json()
+        const result = await response.json();
         // redirect if successful
         if (result.code == 200) {
-            router.push("/MyPlants")
+            router.push("/MyPlants");
         }
-    }
+    };
 
   
 
@@ -98,7 +98,7 @@ const AddPlants: NextPage = () => {
         </form>
         <Footer></Footer>
     </div>
-    )
-}
+    );
+};
 
-export default AddPlants
+export default AddPlants;

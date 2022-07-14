@@ -22,7 +22,7 @@ function Footer() {
     };
 
     // var that contains the closing comment tag on the footer
-    const closer = `@ Toby’s Plants Bros Company`
+    const closer = `@ Toby’s Plants Bros Company`;
 
     return (
         <div>

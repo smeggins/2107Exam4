@@ -1,4 +1,4 @@
-import '@styles/global.sass'
+import '@styles/global.sass';
 import { SessionProvider } from 'next-auth/react';
 
 function MyApp(

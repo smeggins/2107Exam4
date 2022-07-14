@@ -1,34 +1,34 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import styles from '@styles/PlantFinder.module.sass'
-import stylesSearch from '@styles/SearchBar.module.sass'
-import searchIcon from '@public/searchIcon.png'
-import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
-import PlantComponent from './components/Plant/Plant'
-import { ToolController } from '@/backEnd/dataAccessLayer/actions/tool'
-import { Tool } from '@/shared/interfaces/Tool'
-import { useState } from 'react'
-import {SearchTools} from '@/shared/actions/search'
-import Image from 'next/image'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import styles from '@styles/PlantFinder.module.sass';
+import stylesSearch from '@styles/SearchBar.module.sass';
+import searchIcon from '@public/searchIcon.png';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import PlantComponent from './components/Plant/Plant';
+import { ToolController } from '@/backEnd/dataAccessLayer/actions/tool';
+import { Tool } from '@/shared/interfaces/Tool';
+import { useState } from 'react';
+import {SearchTools} from '@/shared/actions/search';
+import Image from 'next/image';
 
 const PlantsCare: NextPage = (props: {tools: [Tool?]}) => {
     // the tools you retrieved
-    const [tools, setTools] = useState(props.tools)
+    const [tools, setTools] = useState(props.tools);
     // the value for used to search for tools
-    const [searchVal, setSearchVal] = useState("")
+    const [searchVal, setSearchVal] = useState("");
 
     // task to search for tools
     async function search(event) {
         // result of our search for tools
-        const result:[ToolController?] = await SearchTools(event, searchVal) as [ToolController?]
+        const result:[ToolController?] = await SearchTools(event, searchVal) as [ToolController?];
 
         // assigns tools depending on result
         if (result == null) {
-            setTools(props.tools)
+            setTools(props.tools);
         }
         else {
-            setTools(result)
+            setTools(result);
         }
     }
 
@@ -45,7 +45,7 @@ const PlantsCare: NextPage = (props: {tools: [Tool?]}) => {
                 <div className={stylesSearch.SearchBarContainer}>
                     <div>
                         <div className={stylesSearch.SearchBarIcon}><Image src={searchIcon} alt="me" layout="fill" objectFit="contain" /></div>
-                        <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value)}} placeholder='search' type="text" name='search' onKeyDown={search} />
+                        <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value);}} placeholder='search' type="text" name='search' onKeyDown={search} />
                     </div>
                 </div>
                 <h1>Plants Care</h1>
@@ -65,8 +65,8 @@ const PlantsCare: NextPage = (props: {tools: [Tool?]}) => {
             </main>
             <Footer></Footer>
         </div>
-    )
-}
+    );
+};
 
 export async function getServerSideProps() {
     // get all tools
@@ -81,4 +81,4 @@ export async function getServerSideProps() {
     };
 }
 
-export default PlantsCare
+export default PlantsCare;

@@ -1,34 +1,34 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '@styles/PlantFinder.module.sass'
-import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '@styles/PlantFinder.module.sass';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 import stylesSearch from '@styles/SearchBar.module.sass';
-import TobysButton from './components/TobysButton/TobysButton'
-import PlantWithEdit from './components/PlantWithEdit/PlantWithEdit'
-import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant'
-import { useState } from 'react'
-import { SearchPlants } from '@/shared/actions/search'
-import searchIcon from '@public/searchIcon.png'
+import TobysButton from './components/TobysButton/TobysButton';
+import PlantWithEdit from './components/PlantWithEdit/PlantWithEdit';
+import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant';
+import { useState } from 'react';
+import { SearchPlants } from '@/shared/actions/search';
+import searchIcon from '@public/searchIcon.png';
 
 const MyPlants: NextPage = (props: {plants: [PlantController?]}) => {
     // plants retrieved
-    const [plants, setPlants] = useState(props.plants)
+    const [plants, setPlants] = useState(props.plants);
     // the value to search by
-    const [searchVal, setSearchVal] = useState("")
+    const [searchVal, setSearchVal] = useState("");
 
     // perform search for plants
     async function search(event) {
         // the result of out search for plants
-        const result:[PlantController?] = await SearchPlants(event, searchVal) as [PlantController?]
+        const result:[PlantController?] = await SearchPlants(event, searchVal) as [PlantController?];
 
         // assign plants depending on result
         if (result == null) {
-            setPlants(props.plants)
+            setPlants(props.plants);
         }
         else {
-            setPlants(result)
+            setPlants(result);
         }
     }
 
@@ -45,7 +45,7 @@ const MyPlants: NextPage = (props: {plants: [PlantController?]}) => {
             <div className={stylesSearch.SearchBarContainer}>
                 <div>
                     <div className={stylesSearch.SearchBarIcon}><Image src={searchIcon} alt="me" layout="fill" objectFit="contain" /></div>
-                    <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value)}} placeholder='search' type="text" name='search' onKeyDown={search} />
+                    <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value);}} placeholder='search' type="text" name='search' onKeyDown={search} />
                 </div>
             </div>
             <div className={styles.MyPlantsHeaderContainer}>
@@ -72,8 +72,8 @@ const MyPlants: NextPage = (props: {plants: [PlantController?]}) => {
         </main>
         <Footer></Footer>
     </div>
-    )
-}
+    );
+};
 
 export async function getServerSideProps() {
     // get all plants
@@ -88,6 +88,6 @@ export async function getServerSideProps() {
     };
 }
 
-export default MyPlants
+export default MyPlants;
 
 
