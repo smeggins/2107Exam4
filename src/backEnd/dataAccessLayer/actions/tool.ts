@@ -16,11 +16,10 @@ export class ToolController implements DatabaseObject, Tool {
     imagePath: string
     
     constructor(name: string, description: string, imagePath: string = "", _id: string = "") {
-        /// instantiated with a default value if non is given
-        this._id = _id
         this.name = name;
         this.description = description;
         this.imagePath = imagePath;
+        this._id = _id
     }
 
     /// saves the user to the database
@@ -43,7 +42,7 @@ export class ToolController implements DatabaseObject, Tool {
         return await ORM.find(ToolModel, _id)
     }
 
-    /// if a user exists in the database with the given Id return it
+    /// if a user exists in the database with the given name return it
     static async getToolByName(name: string) {
         return await ORM.findByName(ToolModel, name)
     }

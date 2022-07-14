@@ -12,17 +12,18 @@ import stylesSearch from '@styles/SearchBar.module.sass';
 import searchIcon from '@public/searchIcon.png'
 import {SearchPlants} from '@/shared/actions/search'
 
-interface PlantProps {
-    plants: [Plant?]
-}
-
-const PlantsFinder: NextPage = (props: PlantProps) => {
+const PlantsFinder: NextPage = (props: {plants: [Plant?]}) => {
+    // plants retrieved
     const [plants, setPlants] = useState(props.plants)
+    // the value used to search for plants
     const [searchVal, setSearchVal] = useState("")
 
+    // the task to perform our search for plants
     async function search(event) {
+        // the result of our search for plants
         const result:[PlantController?] = await SearchPlants(event, searchVal) as [PlantController?]
 
+        // sets plants depending on result
         if (result == null) {
             setPlants(props.plants)
         }
@@ -41,41 +42,38 @@ const PlantsFinder: NextPage = (props: PlantProps) => {
 
             <Header></Header>
             <main className={styles.main}>
-            <div className={stylesSearch.SearchBarContainer}>
-                <div>
-                    <div className={stylesSearch.SearchBarIcon}><Image src={searchIcon} alt="me" layout="fill" objectFit="contain" /></div>
-                    <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value)}} placeholder='search' type="text" name='search' onKeyDown={search} />
+                <div className={stylesSearch.SearchBarContainer}>
+                    <div>
+                        <div className={stylesSearch.SearchBarIcon}><Image src={searchIcon} alt="me" layout="fill" objectFit="contain" /></div>
+                        <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value)}} placeholder='search' type="text" name='search' onKeyDown={search} />
+                    </div>
                 </div>
-            </div>
-
-            <h1>PLANTS FINDER</h1>
-            
-            <div className={styles.PlantFinderResultsContainer}>
-            {
-            plants.map(
-                (item) => {
-                    return (
-                        <div className={styles.PlantFinderResult} key={ String(item.name) }>
-                            <PlantComponent name={item.name} description={item.description} imagePath={`/plants/${item.imagePath}`}></PlantComponent>
-                        </div>
-                    );
+                <h1>PLANTS FINDER</h1>
+                <div className={styles.PlantFinderResultsContainer}>
+                {
+                plants.map(
+                    (item) => {
+                        return (
+                            <div className={styles.PlantFinderResult} key={ String(item.name) }>
+                                <PlantComponent name={item.name} description={item.description} imagePath={`/plants/${item.imagePath}`}></PlantComponent>
+                            </div>
+                        );
+                    }
+                )
                 }
-            )
-            }
-            </div>
-
+                </div>
             </main>
             <Footer></Footer>
         </div>
     )
 }
 
-// get server side props using id value passed by link in list card
 export async function getServerSideProps() {
-    // get all lists associated with the given id
+    // get all plants
     const queryResult = await PlantController.getPlants();
-    // parse the results into an array of SSLists
+    // parse the results into an array of plants and returns them
     const plants = JSON.parse(JSON.stringify(queryResult)) as [PlantController];
+    
     return {
         props: {
         plants

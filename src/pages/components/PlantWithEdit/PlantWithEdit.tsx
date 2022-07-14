@@ -1,12 +1,9 @@
 import styles from './PlantWithEdit.module.sass';
 import Image from 'next/image';
 import TobysButton from '../TobysButton/TobysButton';
-import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant';
 
+// represents a plant with a name, description and an edit button
 function PlantWithEdit({id, name, description, imagePath}) {
-    
-
-
     return (
         <div>
             <div className={styles.PlantContainer}>

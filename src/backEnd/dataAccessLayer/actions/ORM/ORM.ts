@@ -28,7 +28,7 @@ export class ORM {
         return foundEntries;
     }
 
-    /// return all entries in the database that match the given model
+    /// return 'numberofResults' entries in the database that match the given model
     /// Cast the result as an array of objects you expect from the call.
     /// Ie> i'm getting all of the questions so i cast them as: question[]
     static async findSome(model: mongoose.Model<any>, numberOfResults: number) {

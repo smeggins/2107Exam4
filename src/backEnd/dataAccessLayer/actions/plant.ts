@@ -16,11 +16,10 @@ export class PlantController implements DatabaseObject, Plant {
     imagePath: string
     
     constructor(name: string, description: string, imagePath: string = "", _id: string = "") {
-        /// instantiated with a default value if non is given
-        this._id = _id
         this.name = name;
         this.description = description;
         this.imagePath = imagePath;
+        this._id = _id
     }
 
     /// saves the user to the database

@@ -1,23 +1,22 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { UserController } from "@dataAccessLayer/actions/user"
-
 import { hash } from 'bcrypt';
 
 //Reference Yudhvirs Class 30/06/2022
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // 1) get username & password from body
+    //user information sent with req parsed into vars
     const { email, password }: { email: string, password: string} = req.body;
-    console.log("made it to form validation")
-    console.log("email: ", email)
-    console.log("password: ", password)
+
     try {
+        // validate the correct request type
         if (req.method !== 'POST') {
             throw {
                 code: 405,
                 message: 'only POST is allowed'
             };
         }
+
+        // validation on inputs
         if (email == null || !email || email.length <= 3 || email.length > 320) {
             throw {
                 code: 400,
@@ -33,12 +32,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 type: 'NETWORK'
             }
         }
-        const lowercasedEmail = email.toLowerCase();
-        console.log("about to make a user")
-        const existingUser: UserController = await UserController.getUserByEmail(lowercasedEmail)
-        console.log("existingUser: ", existingUser)
 
-        // 3) throw an error if it exists
+        // casts email to all lower case letters
+        const lowercasedEmail = email.toLowerCase();
+        // attempts to retrieve user with the lowercase email
+        const existingUser: UserController = await UserController.getUserByEmail(lowercasedEmail)
+
+        // if user with that email exists throw and error
         if (existingUser) {
             throw {
                 code: 400,
@@ -46,26 +46,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        // 4) hash the password
-        // hash the password (auto get a salt)
+        // hash the password using bcrypt
         const hashedPassword = await hash(password, 10);
 
+        // create a new usercontroller and save the new user
         const user = new UserController(lowercasedEmail, hashedPassword)
-        console.log("user.email: ", user.email)
         user.save()
 
-        // optional, automatically sign in the user
-        // look at nextauth docs to do this
-        // 6) send back a succesful response
+        // return success
         res.status(200).json(
             {
                 code: 200,
                 success: true
             }
         );
-    } catch(error: any) {
+    } 
+    catch(error: any) {
         const { code = 500, message } = error;
-        console.log(message)
         res.status(code).json(
             {
                 code,

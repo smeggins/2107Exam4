@@ -1,15 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { UserController } from "@dataAccessLayer/actions/user"
 import { PlantController } from "@/backEnd/dataAccessLayer/actions/plant";
 
 //Reference Yudhvirs Class 30/06/2022
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // 1) get username & password from body
+    //plant information sent with req parsed into vars
     const name = String(req.query.name);
-    console.log("made it to form validation")
-    console.log("name: ", name)
+
     try {
+        // validate the correct request type
+        if (req.method !== 'GET') {
+            throw {
+                code: 405,
+                message: 'only GET is allowed'
+            };
+        }
+
+        // basic value validation
         if (name == null || !name) {
             throw {
                 code: 400,
@@ -18,27 +24,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        if (req.method !== 'GET') {
-            throw {
-                code: 405,
-                message: 'only GET is allowed'
-            };
-        }
-        console.log("about to get a plant")
+        // attempts to retrieve plant by name
         const existingPlant = await PlantController.getPlantByName(name)
-        console.log("existingPlant: ", existingPlant)
 
-        if (!existingPlant) {
-            res.status(200).json(
-                {
-                    code: 200,
-                    success: false
-                }
-            );
-
-            return
-        }
-        else {
+        // validates plant was retrieved and returns it
+        if (existingPlant) {
             res.status(200).json(
                 {
                     code: 200,
@@ -47,10 +37,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             );
         }
-        
-    } catch(error: any) {
+    } 
+    catch(error: any) {
         const { code = 500, message } = error;
-        console.log(message)
         res.status(code).json(
             {
                 code,

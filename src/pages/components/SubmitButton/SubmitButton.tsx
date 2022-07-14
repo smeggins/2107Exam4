@@ -1,5 +1,6 @@
 import styles from './SubmitButton.module.sass';
 
+// represents a simple submit button that accepts a delegate function
 function SubmitButton({name, delegate = async () =>{}}) {
     return (
         <div className={styles.SubmitButtonContainer}>

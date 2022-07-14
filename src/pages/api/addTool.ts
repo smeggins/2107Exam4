@@ -1,16 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { UserController } from "@dataAccessLayer/actions/user"
 import { ToolController } from "@/backEnd/dataAccessLayer/actions/tool";
 
 //Reference Yudhvirs Class 30/06/2022
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // 1) get username & password from body
+    //plant information sent with req parsed into vars
     const { name, description, image }: { name: string, description: string, image: string} = req.body;
-    console.log("made it to form validation")
-    console.log("name: ", name)
-    console.log("description: ", description)
+
     try {
+        // validate the correct request type
+        if (req.method !== 'POST') {
+            throw {
+                code: 405,
+                message: 'only POST is allowed'
+            };
+        }
+
+        // basic validation of ref vars
         if (name == null || !name || name.length <= 2 || name.length > 10) {
             throw {
                 code: 400,
@@ -19,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        if (description == null || !description || description.length < 4 || description.length > 600) {
+        if (description == null || !description || description.length < 4 || description.length > 60) {
             throw {
                 code: 400,
                 message: 'invalid information given for Tool description',
@@ -27,17 +32,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        if (req.method !== 'POST') {
-            throw {
-                code: 405,
-                message: 'only POST is allowed'
-            };
-        }
-        console.log("about to make a Tool")
+        // attempts to retrieve a tool with the given name
         const existingTool: ToolController = await ToolController.getToolByName(name.toUpperCase())
-        console.log("existingTool: ", existingTool)
 
-        // 3) throw an error if it exists
+        // if tool exists throw error
         if (existingTool) {
             throw {
                 code: 400,
@@ -45,22 +43,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
+        // build a new instance of the tool and save it
         const Tool = new ToolController(name.toUpperCase(), description, image)
-        console.log("Tool.email: ", Tool.imagePath)
         Tool.save()
 
-        // optional, automatically sign in the user
-        // look at nextauth docs to do this
-        // 6) send back a succesful response
+        // return success
         res.status(200).json(
             {
                 code: 200,
                 success: true
             }
         );
-    } catch(error: any) {
+    } 
+    catch(error: any) {
         const { code = 500, message } = error;
-        console.log(message)
         res.status(code).json(
             {
                 code,

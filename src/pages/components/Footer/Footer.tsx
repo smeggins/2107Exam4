@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styles from './Footer.module.sass';
 
 function Footer() {
-    
+    // creates a click-able link that will re-direct users to the given path
     function navLink(path: string, title:string) {
         return (
             <div className={styles.FooterItem}>
@@ -13,6 +13,7 @@ function Footer() {
         );
     }
 
+    // scrolls the user back to the top of the current page fluidly
     const goToTop = () => {
         window.scrollTo({
             top: 0,
@@ -20,6 +21,7 @@ function Footer() {
         });
     };
 
+    // var that contains the closing comment tag on the footer
     const closer = `@ Toby’s Plants Bros Company`
 
     return (
@@ -30,7 +32,6 @@ function Footer() {
                     {navLink("", "about us")}
                     {navLink("", "subscribe us")}  
                 </div>
-                
                 <a onClick={goToTop} >back to top</a>
                 <h4>{closer}</h4>
             </div>

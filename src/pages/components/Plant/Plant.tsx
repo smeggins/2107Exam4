@@ -1,10 +1,8 @@
-import Link from 'next/link';
 import styles from './Plant.module.sass';
-import plant from '../../../../public/plantA.png'
 import Image from 'next/image';
 
+// represents a plant with name and description
 function PlantComponent({name, description, imagePath}) {
-
     return (
         <div>
             <div className={styles.PlantContainer}>

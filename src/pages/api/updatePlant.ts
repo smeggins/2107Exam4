@@ -1,16 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { UserController } from "@dataAccessLayer/actions/user"
 import { PlantController } from "@/backEnd/dataAccessLayer/actions/plant";
 
 //Reference Yudhvirs Class 30/06/2022
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // 1) get username & password from body
+    //plant information sent with req parsed into vars
     const {_id,  name, description, image }: { _id: string, name: string, description: string, image: string} = req.body;
-    console.log("made it to form validation")
-    console.log("name: ", name)
-    console.log("description: ", description)
+
     try {
+        // validate the correct request type
+        if (req.method !== 'PUT') {
+            throw {
+                code: 405,
+                message: 'only PUT is allowed'
+            };
+        }
+
+        // validation on ref values
         if (_id == null || !_id) {
             throw {
                 code: 400,
@@ -27,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        if (description == null || !description || description.length < 4 || description.length > 50) {
+        if (description == null || !description || description.length < 4 || description.length > 60) {
             throw {
                 code: 400,
                 message: 'invalid information given for plant description',
@@ -35,26 +40,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        if (req.method !== 'PUT') {
-            throw {
-                code: 405,
-                message: 'only PUT is allowed'
-            };
-        }
-        console.log("about to update a plant")
+        // creates a new plant with the updated values and updates it
         const newPlant: PlantController = new PlantController(name.toUpperCase(), description, image, _id)
         let response  = await newPlant.updatePlant()
-        console.log("response to update: ", response)
 
+        // returns success
         res.status(200).json(
             {
                 code: 200,
                 success: true
             }
         );
-    } catch(error: any) {
+    } 
+    catch(error: any) {
         const { code = 500, message } = error;
-        console.log(message)
         res.status(code).json(
             {
                 code,

@@ -12,17 +12,18 @@ import { useState } from 'react'
 import {SearchTools} from '@/shared/actions/search'
 import Image from 'next/image'
 
-interface ToolProps {
-  tools: [Tool?]
-}
-
-const PlantsCare: NextPage = (props: ToolProps) => {
+const PlantsCare: NextPage = (props: {tools: [Tool?]}) => {
+    // the tools you retrieved
     const [tools, setTools] = useState(props.tools)
+    // the value for used to search for tools
     const [searchVal, setSearchVal] = useState("")
 
+    // task to search for tools
     async function search(event) {
+        // result of our search for tools
         const result:[ToolController?] = await SearchTools(event, searchVal) as [ToolController?]
 
+        // assigns tools depending on result
         if (result == null) {
             setTools(props.tools)
         }
@@ -47,7 +48,6 @@ const PlantsCare: NextPage = (props: ToolProps) => {
                         <input className={stylesSearch.SearchBar} onChange = {e => { setSearchVal(e.currentTarget.value)}} placeholder='search' type="text" name='search' onKeyDown={search} />
                     </div>
                 </div>
-
                 <h1>Plants Care</h1>
                 <div className={styles.PlantFinderResultsContainer}>
                 {
@@ -68,12 +68,12 @@ const PlantsCare: NextPage = (props: ToolProps) => {
     )
 }
 
-// get server side props using id value passed by link in list card
 export async function getServerSideProps() {
-    // get all lists associated with the given id
+    // get all tools
     const queryResult = await ToolController.getTools();
-    // parse the results into an array of SSLists
+    // parse the results into an array of tools and return them
     const tools = JSON.parse(JSON.stringify(queryResult)) as [ToolController];
+    
     return {
         props: {
         tools

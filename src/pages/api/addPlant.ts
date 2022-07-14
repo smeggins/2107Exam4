@@ -1,16 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { UserController } from "@dataAccessLayer/actions/user"
 import { PlantController } from "@/backEnd/dataAccessLayer/actions/plant";
 
 //Reference Yudhvirs Class 30/06/2022
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // 1) get username & password from body
+    //plant information sent with req parsed into vars
     const { name, description, image }: { name: string, description: string, image: string} = req.body;
-    console.log("made it to form validation")
-    console.log("name: ", name)
-    console.log("description: ", description)
+
     try {
+        // validate the correct request type
+        if (req.method !== 'POST') {
+            throw {
+                code: 405,
+                message: 'only POST is allowed'
+            };
+        }
+
+        // basic validation of input values
         if (name == null || !name || name.length <= 2 || name.length > 10) {
             throw {
                 code: 400,
@@ -19,25 +24,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        if (description == null || !description || description.length < 4 || description.length > 50) {
+        if (description == null || !description || description.length < 4 || description.length > 60) {
             throw {
                 code: 400,
                 message: 'invalid information given for plant description',
                 type: 'NETWORK'
             }
         }
-
-        if (req.method !== 'POST') {
-            throw {
-                code: 405,
-                message: 'only POST is allowed'
-            };
-        }
-        console.log("about to make a plant")
+        
+        // attempt to retrieve plant by name
         const existingPlant: PlantController = await PlantController.getPlantByName(name.toUpperCase())
-        console.log("existingPlant: ", existingPlant)
 
-        // 3) throw an error if it exists
+        // if plant exists throw error
         if (existingPlant) {
             throw {
                 code: 400,
@@ -45,22 +43,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
+        // create new plant object and save it
         const plant = new PlantController(name.toUpperCase(), description, image)
-        console.log("plant.email: ", plant.imagePath)
         plant.save()
 
-        // optional, automatically sign in the user
-        // look at nextauth docs to do this
-        // 6) send back a succesful response
+        // return success
         res.status(200).json(
             {
                 code: 200,
                 success: true
             }
         );
-    } catch(error: any) {
+    } 
+    catch(error: any) {
         const { code = 500, message } = error;
-        console.log(message)
         res.status(code).json(
             {
                 code,

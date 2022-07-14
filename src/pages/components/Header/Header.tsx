@@ -4,14 +4,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import styles from './Header.module.sass';
-// import image from '../../../../public/UserIcon.png'
 
 function Header() {
-
+    // the user Icon image
     const [image, setImage] = useState('/UserIcon.png')
+    // the path to re-direct the browser to when clicking the user icon image
     const [path, setPath] = useState('/auth/Login')
+    // instance of useRouter
     const router = useRouter()
+    // session data
     const {data: session, status: loading} = useSession();
+
+    // if session exists show logged in icon and change user icon re-direct path
     useEffect(()=> {
         if (session) {
             setImage("/userIconLoggedIn.png")
@@ -19,8 +23,8 @@ function Header() {
         }
     }, [session]);
 
+    // create a custom navlink for header that changes underlined header link based on current page 
     function navLink(path: string, title:string) {
-
         return (
             <div className={styles.HeaderItem}>
                 <Link href={{ pathname: '/' + path }}>

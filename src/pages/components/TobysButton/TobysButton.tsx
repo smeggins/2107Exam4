@@ -1,8 +1,7 @@
 import styles from './TobysButton.module.sass';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-
+// represent a button that accepts a delegate and a path that it will re-direct to after executing the delegate
 function TobysButton({name, path, delegate = async () =>{}}) {
     const router = useRouter()
     return (

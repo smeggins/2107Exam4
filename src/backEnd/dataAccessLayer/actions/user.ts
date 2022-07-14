@@ -16,10 +16,9 @@ export class UserController implements DatabaseObject, User {
     plantIDs: [string]
     
     constructor(email: string, password: string, _id: string = "") {
-        /// instantiated with a default value if non is given
-        this._id = _id
         this.email = email;
         this.password = password;
+        this._id = _id;
     }
     
 

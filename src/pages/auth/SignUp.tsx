@@ -12,18 +12,12 @@ import { useRouter } from 'next/router'
 const SingUp: NextPage = () => {
     // router used for navigating pages
     const router = useRouter()
-    // The logged in users ID
-    const [email, setEmail] = useState('');
-    // The logged in users ID
-    const [password, setPassword] = useState('');
-    
 
     // reference: https://nextjs.org/docs/guides/building-forms
     const handleSubmit = async (event) => {
         // Stop the form from submitting and refreshing the page.
         event.preventDefault()
-        console.log("event: ", event.target.Email.value)
-        console.log("event: ", event.target.Password.value)
+        
         // build the values to send to the back end 
         let rateValues = {
             email: event.target.Email.value, 
