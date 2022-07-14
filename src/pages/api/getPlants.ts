@@ -24,8 +24,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             };
         }
 
+        // all names are uppercase so a search should also always be uppercase
+        const uppercaseName = name.toUpperCase();
+
         // attempts to retrieve plant by name
-        const existingPlant = await PlantController.getPlantByName(name);
+        const existingPlant = await PlantController.getPlantByName(uppercaseName);
 
         // validates plant was retrieved and returns it
         if (existingPlant) {

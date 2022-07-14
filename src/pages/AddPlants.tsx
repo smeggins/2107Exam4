@@ -6,10 +6,12 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const AddPlants: NextPage = () => {
+    const demoPlantPathPostix = ["A", "B", "C", "D", "E", "F", "AA", "BB", "CC", "DD",];
     // sets the current plant image path
-    const [plantImage, setPlantImage] = useState('');
+    const [plantImage, setPlantImage] = useState(`plant${demoPlantPathPostix[Math.floor(Math.random() * demoPlantPathPostix.length)]}.png`);
     // router used for navigating pages
     const router = useRouter();
         
@@ -21,7 +23,8 @@ const AddPlants: NextPage = () => {
         // build the values to send to the back end 
         let rateValues = {
             name: event.target.Name.value, 
-            description: event.target.Description.value
+            description: event.target.Description.value,
+            image: plantImage
         };
         // stringify the values
         const body = JSON.stringify(rateValues);
@@ -65,8 +68,8 @@ const AddPlants: NextPage = () => {
             </div>
             <div className={styles.AddPlantsInputsContainers}>
                 <div className={styles.AddPlantsImageContainer}>
-                    <h1>+</h1>
-                    {/* <Image src={plantImage} alt='Plant Image'></Image> */}
+                    {/* <h1>+</h1> */}
+                    <Image src={`/plants/${plantImage}`} alt='Plant Image' layout='fill' objectFit='contain'></Image>
                 </div>
                 <div className={styles.AddPlantsNameContainer}>
                     <input
