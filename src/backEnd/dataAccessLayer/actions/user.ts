@@ -19,7 +19,13 @@ export class UserController implements DatabaseObject, User {
         this.email = email;
         this.password = password;
         this._id = _id;
-        this.plantIDs = plantIDs;
+        if (plantIDs == null) {
+            const temp: string[] = [];
+            this.plantIDs = temp as [string];
+        }
+        else {
+            this.plantIDs = plantIDs;
+        }
     }
     
 
