@@ -1,6 +1,6 @@
 import Database from "@dataAccessLayer/database/database";
 import { DatabaseObject } from "@interfaces/DatabaseObject";
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose from "mongoose";
 
 
 export class ORM {
@@ -92,4 +92,15 @@ export class ORM {
         
         return returnResult;
     } 
+
+    /// find all documents for the given model that contains the given ids
+    static async findByIDs(model: mongoose.Model<any>, inputIDs: [string]) {
+        /// establishes a connection to the database
+        await Database.setupClient();
+        var mongoose = require('mongoose');
+        /// returns a mongoose query that only includes documents that contain the same ids given to the array needs to be Cast to the requested object type 
+        const foundEntries = await model.find({ _id: {$in:  inputIDs} });
+
+        return foundEntries;
+    }
 }

@@ -57,6 +57,11 @@ export class PlantController implements DatabaseObject, Plant {
         return await ORM.findSome(PlantModel, 2);
     }
 
+    /// get all users that belong to the PlantModel in the database
+    static async getPlantsByIDs(ids: [string]) {
+        return await ORM.findByIDs(PlantModel, ids);
+    }
+
     /// converts given values of this object into a HashMap
     toHashMap(): HashMap {
         return {

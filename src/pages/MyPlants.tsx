@@ -8,9 +8,12 @@ import stylesSearch from '@styles/SearchBar.module.sass';
 import TobysButton from './components/TobysButton/TobysButton';
 import PlantWithEdit from './components/PlantWithEdit/PlantWithEdit';
 import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchPlants } from '@/shared/actions/search';
 import searchIcon from '@public/searchIcon.png';
+import { getSession, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { UserController } from '@/backEnd/dataAccessLayer/actions/user';
 
 const MyPlants: NextPage = (props: {plants: [PlantController?]}) => {
     // plants retrieved
@@ -75,9 +78,19 @@ const MyPlants: NextPage = (props: {plants: [PlantController?]}) => {
     );
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps({req}) {
+    const session = await getSession({ req });
+    if (!session.user.id) {
+        return {
+            redirect: {
+              destination: "/auth/Login",
+            }
+          };
+    }
+    const user: UserController = await UserController.getUser(session.user.id);
     // get all plants
-    const queryResult = await PlantController.getPlants();
+    const queryResult = await PlantController.getPlantsByIDs(user.plantIDs);
+    console.log("queryResult: ", queryResult)
     // parse the results into an array of plants and return them
     const plants = JSON.parse(JSON.stringify(queryResult)) as [PlantController];
     
