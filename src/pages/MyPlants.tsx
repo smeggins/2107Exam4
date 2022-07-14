@@ -9,18 +9,18 @@ import TobysButton from './components/TobysButton/TobysButton';
 import PlantWithEdit from './components/PlantWithEdit/PlantWithEdit';
 import { PlantController } from '@/backEnd/dataAccessLayer/actions/plant';
 import { useEffect, useState } from 'react';
-import { SearchPlants } from '@/shared/actions/search';
 import searchIcon from '@public/searchIcon.png';
 import { getSession, useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import { UserController } from '@/backEnd/dataAccessLayer/actions/user';
+
+//reference https://stackoverflow.com/questions/52311150/find-all-matching-elements-with-in-an-array-of-objects
 
 const MyPlants: NextPage = (props: {plants: [PlantController?]}) => {
     // plants retrieved
     const [plants, setPlants] = useState(props.plants);
     // the value to search by
     const [searchVal, setSearchVal] = useState("");
-    // 
+    // reference https://bobbyhadz.com/blog/javascript-remove-all-whitespace-from-string#:~:text=To%20remove%20all%20whitespace%20from,string%20with%20all%20whitespace%20removed.&text=Copied!
     useEffect(() => {
         if (searchVal.replace(/\s/g, '') == "") {
             setPlants(props.plants);
